@@ -5,16 +5,26 @@ import Task from "../models/task.model";
 
 // [GET] /tasks/api/v1
 export const index = async (req: Request, res: Response) => {
+
+  // Find
   interface Find{
-    deteted: boolean,
+    deleted: boolean,
     status?: string
   }
-  const find = {
+  const find:Find = {
     deleted: false
   }
   if(req.query.status){
-    find["status"] = req.query.status; // add thuộc tính khác với js find.status(báo lỗi)
+    find.status = req.query.status.toString(); // add thuộc tính khác với js find.status(báo lỗi)
   }
+
+  // Cách 2
+  // if(req.query.status){
+  //   find["status"] = req.query.status.toString(); // add thuộc tính khác với js find.status(báo lỗi)
+  // }
+  // End Find
+
+
   const tasks = await Task.find(find);
 
   res.json(tasks);
