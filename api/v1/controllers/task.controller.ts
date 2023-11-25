@@ -5,9 +5,18 @@ import Task from "../models/task.model";
 
 // [GET] /tasks/api/v1
 export const index = async (req: Request, res: Response) => {
-  const tasks = await Task.find({
+  interface Find{
+    deteted: boolean,
+    status?: string
+  }
+  const find = {
     deleted: false
-  });
+  }
+  if(req.params.status){
+    find["status"] = req.params.status; // add thuộc tính khác với js find.status(báo lỗi)
+  }
+  const tasks = await Task.find(find);
+
   res.json(tasks);
 }
 
@@ -23,3 +32,7 @@ export const detail = async (req: Request, res: Response) => {
 
   res.json(task);
 }
+
+
+
+
