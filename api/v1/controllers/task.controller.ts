@@ -12,8 +12,8 @@ export const index = async (req: Request, res: Response) => {
   const find = {
     deleted: false
   }
-  if(req.params.status){
-    find["status"] = req.params.status; // add thuộc tính khác với js find.status(báo lỗi)
+  if(req.query.status){
+    find["status"] = req.query.status; // add thuộc tính khác với js find.status(báo lỗi)
   }
   const tasks = await Task.find(find);
 
