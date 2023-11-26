@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import Task from "../models/task.model";
 import paginationHelper from "../../../helpers/pagination";
+import searchHelper from "../../../helpers/search";
 
 // [GET] /tasks/api/v1
 export const index = async (req: Request, res: Response) => {
@@ -9,7 +10,8 @@ export const index = async (req: Request, res: Response) => {
   // Find
   interface Find{
     deleted: boolean,
-    status?: string
+    status?: string, 
+    title?: RegExp
   }
   const find:Find = {
     deleted: false
@@ -23,6 +25,12 @@ export const index = async (req: Request, res: Response) => {
   //   find["status"] = req.query.status.toString(); // add thuộc tính khác với js find.status(báo lỗi)
   // }
   // End Find
+
+  // Search
+  if (req.query.keyword) {
+    find.title = searchHelper(req.query).regex;
+  }
+  // End search
 
   // Sort 
   const sort = {};
