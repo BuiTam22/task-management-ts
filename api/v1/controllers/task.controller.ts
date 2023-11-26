@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import Task from "../models/task.model";
-
+import paginationHelper from "../../../helpers/pagination";
 
 // [GET] /tasks/api/v1
 export const index = async (req: Request, res: Response) => {
@@ -31,10 +31,25 @@ export const index = async (req: Request, res: Response) => {
     const sortKey = req.query.sortKey.toLocaleString();
     sort[sortKey] = req.query.sortValue;
   }
-  console.log(sort);
   // End Sort
 
-  const tasks = await Task.find(find).sort(sort);
+  // Pagination
+  let initPagination = {
+    currentPage: 1,
+    limitItems: 2
+  };
+
+  const countTask:number = await Task.countDocuments(find);
+  const objectPagination = paginationHelper(initPagination, req.query, countTask);
+
+  // End Pagination
+
+  const tasks = await Task.find(find)
+  .sort(sort) 
+  // hàm limit là số lượng tối đa của 1 page
+  .limit(objectPagination.limitItems)
+  // hàm skip là số lượng phần tử cần phải bỏ qua để bắt đầu 1 trang
+  .skip(objectPagination.skip);
 
   res.json(tasks);
 }
