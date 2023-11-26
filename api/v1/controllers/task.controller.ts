@@ -24,8 +24,17 @@ export const index = async (req: Request, res: Response) => {
   // }
   // End Find
 
+  // Sort 
+  const sort = {};
 
-  const tasks = await Task.find(find);
+  if(req.query.sortKey && req.query.sortValue) {
+    const sortKey = req.query.sortKey.toLocaleString();
+    sort[sortKey] = req.query.sortValue;
+  }
+  console.log(sort);
+  // End Sort
+
+  const tasks = await Task.find(find).sort(sort);
 
   res.json(tasks);
 }
