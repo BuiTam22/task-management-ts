@@ -104,21 +104,21 @@ export const changeMulti = async (req: Request, res: Response) =>{
     const key: string = req.body.key;
     
     switch(key){
-      // case "status":
-      //   const value: string = req.body.value;
-      //   await Task.updateMany(
-      //     {
-      //       _id: { $in: ids }
-      //     },
-      //     {
-      //       status: value,
-      //     }
-      //   );
-      //   res.json({
-      //     code: 200,
-      //     message: "Cập nhật trạng thái thành công!",
-      //   });
-      //   break;
+      case "status":
+        const value: string = req.body.value;
+        await Task.updateMany(
+          {
+            _id: { $in: ids }
+          },
+          {
+            status: value,
+          }
+        );
+        res.json({
+          code: 200,
+          message: "Cập nhật trạng thái thành công!",
+        });
+        break;
       case "delete":
         await Task.updateMany(
           {
